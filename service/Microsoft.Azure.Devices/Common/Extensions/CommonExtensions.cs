@@ -14,7 +14,7 @@ namespace Microsoft.Azure.Devices.Common
     using System.Text.RegularExpressions;
 
     using Microsoft.Azure.Devices.Common.WebApi;
-#if !WINDOWS_UWP
+#if !WINDOWS_UWP && !NETSTANDARD1_3
     using Microsoft.Owin;
 #endif
 

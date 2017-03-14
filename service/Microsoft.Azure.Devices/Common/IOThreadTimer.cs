@@ -58,6 +58,7 @@ namespace Microsoft.Azure.Devices.Common
                 (isTypicallyCanceledShortlyAfterBeingSet ? TimerManager.Value.VolatileTimerGroup : TimerManager.Value.StableTimerGroup);
         }
 
+#if !NETSTANDARD1_3
         public static long SystemTimeResolutionTicks
         {
             get
@@ -85,6 +86,7 @@ namespace Microsoft.Azure.Devices.Common
             // Assume the default, which is around 15 milliseconds.
             return 15 * TimeSpan.TicksPerMillisecond;
         }
+#endif
 
         public bool Cancel()
         {
@@ -637,7 +639,11 @@ namespace Microsoft.Azure.Devices.Common
                 Safe = "Doesn't leak information or resources")]
             public WaitableTimer()
             {
+#if NETSTANDARD1_3
+                this.SetSafeWaitHandle(TimerHelper.CreateWaitableTimer());
+#else
                 this.SafeWaitHandle = TimerHelper.CreateWaitableTimer();
+#endif
             }
 
             public long DueTime
@@ -649,7 +655,11 @@ namespace Microsoft.Azure.Devices.Common
                 Safe = "Doesn't leak information or resources")]
             public void Set(long newDueTime)
             {
+#if NETSTANDARD1_3
+                this.dueTime = TimerHelper.Set(this.GetSafeWaitHandle(), newDueTime);
+#else
                 this.dueTime = TimerHelper.Set(this.SafeWaitHandle, newDueTime);
+#endif
             }
             [Fx.Tag.SecurityNote(Critical = "Provides a set of unsafe methods used to work with the WaitableTimer")]
             [SecurityCritical]

@@ -598,10 +598,15 @@ namespace Microsoft.Azure.Devices.Common
 
             public ScheduledOverlapped()
             {
+#if WINDOWS_UWP || NETSTANDARD1_3
+                throw new NotImplementedException();
+#else
                 this.nativeOverlapped = (new Overlapped()).UnsafePack(
                     Fx.ThunkCallback(new IOCompletionCallback(IOCallback)), null);
+#endif
             }
 
+#if !WINDOWS_UWP && !NETSTANDARD1_3
             [Fx.Tag.SecurityNote(Miscellaneous = "note that in some hosts this runs without any user context on the stack")]
             void IOCallback(uint errorCode, uint numBytes, NativeOverlapped* nativeOverlappedCallback)
             {
@@ -635,6 +640,7 @@ namespace Microsoft.Azure.Devices.Common
                     }
                 }
             }
+#endif
 
             public void Post(IOThreadScheduler iots)
             {
@@ -642,7 +648,11 @@ namespace Microsoft.Azure.Devices.Common
                 Fx.Assert(iots != null, "Post called with a null scheduler.");
 
                 this.scheduler = iots;
+#if WINDOWS_UWP || NETSTANDARD1_3
+                throw new NotImplementedException();
+#else
                 ThreadPool.UnsafeQueueNativeOverlapped(this.nativeOverlapped);
+#endif
             }
 
             [Fx.Tag.SecurityNote(Miscellaneous = "note that this runs on the finalizer thread")]
@@ -652,9 +662,13 @@ namespace Microsoft.Azure.Devices.Common
                 {
                     throw Fx.AssertAndThrowFatal("Cleanup called on an overlapped that is in-flight.");
                 }
+#if WINDOWS_UWP || NETSTANDARD1_3
+                throw new NotImplementedException();
+#else
                 Overlapped.Free(this.nativeOverlapped);
+#endif
             }
         }
     }
 #endif
-}
+        }

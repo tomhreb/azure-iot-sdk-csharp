@@ -8,7 +8,7 @@ namespace Microsoft.Azure.Devices.Common
 #if WINDOWS_UWP
     using Windows.Security.Cryptography;
 #else
-    using System.Web.Security;
+    //using System.Web.Security;
     using System.Security.Cryptography;
 #endif
 
@@ -72,20 +72,20 @@ namespace Microsoft.Azure.Devices.Common
                 bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]);
         }
 
-        public static string GeneratePassword()
-        {
-            return GeneratePassword(DefaultPasswordLength, false);
-        }
+        //public static string GeneratePassword()
+        //{
+        //    return GeneratePassword(DefaultPasswordLength, false);
+        //}
 
-        public static string GeneratePassword(int length, bool base64Encoding)
-        {
-            var password = Membership.GeneratePassword(length, length / 2);
-            if (base64Encoding)
-            {
-                password = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
-            }
-            return password;
-        }
+        //public static string GeneratePassword(int length, bool base64Encoding)
+        //{
+        //    var password = Membership.GeneratePassword(length, length / 2);
+        //    if (base64Encoding)
+        //    {
+        //        password = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
+        //    }
+        //    return password;
+        //}
 #endif
     }
 }

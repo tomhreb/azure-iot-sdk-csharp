@@ -4,7 +4,7 @@
 namespace Microsoft.Azure.Devices
 {
     using System;
-#if !WINDOWS_UWP
+#if !WINDOWS_UWP && !NETSTANDARD1_3
     using System.Configuration;
 #endif
     using System.Net;
@@ -156,7 +156,7 @@ namespace Microsoft.Azure.Devices
 
         static bool InitializeDisableServerCertificateValidation()
         {
-#if !WINDOWS_UWP
+#if !WINDOWS_UWP && !NETSTANDARD1_3
             string value = ConfigurationManager.AppSettings[DisableServerCertificateValidationKeyName];
             if (!string.IsNullOrEmpty(value))
             {
@@ -265,7 +265,9 @@ namespace Microsoft.Azure.Devices
                 websocket.Options.Proxy = webProxy;
             }
 
+#if !NETSTANDARD1_3
             websocket.Options.UseDefaultCredentials = true;
+#endif
 
             using (var cancellationTokenSource = new CancellationTokenSource(timeout))
             {
@@ -282,14 +284,14 @@ namespace Microsoft.Azure.Devices
             return websocket;
         }
 #endif
-        async Task<TransportBase> CreateClientWebSocketTransport(TimeSpan timeout)
+            async Task<TransportBase> CreateClientWebSocketTransport(TimeSpan timeout)
         {
 #if WINDOWS_UWP
             throw new NotImplementedException("web sockets are not yet supported for UWP");
 #else
             var timeoutHelper = new TimeoutHelper(timeout);
             Uri websocketUri = new Uri(WebSocketConstants.Scheme + this.ConnectionString.HostName + ":" + WebSocketConstants.SecurePort + WebSocketConstants.UriSuffix);
-
+#if !NETSTANDARD1_3
             // Use Legacy WebSocket if it is running on Windows 7 or older. Windows 7/Windows 2008 R2 is version 6.1
             if (Environment.OSVersion.Version.Major < 6 || (Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor <= 1))
             {
@@ -302,12 +304,15 @@ namespace Microsoft.Azure.Devices
             }
             else
             {
+#endif
                 var websocket = await CreateClientWebSocketAsync(websocketUri, timeoutHelper.RemainingTime());
                 return new ClientWebSocketTransport(
                     websocket,
                     null,
                     null);
+#if !NETSTANDARD1_3
             }
+#endif
 #endif
         }
 

@@ -113,7 +113,7 @@ namespace Microsoft.Azure.Devices.Common
             ////MessagingClientEtwProvider.Provider.EventWriteUnhandledException(this.eventSourceName + ": " + exception.ToStringSlim());
         }
 
-#if !WINDOWS_UWP
+#if !WINDOWS_UWP && !NETSTANDARD1_3
         [ResourceConsumption(ResourceScope.Process)]
         [Fx.Tag.SecurityNote(Critical = "Calls 'System.Runtime.Interop.UnsafeNativeMethods.IsDebuggerPresent()' which is a P/Invoke method",
             Safe = "Does not leak any resource, needed for debugging")]

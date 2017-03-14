@@ -3,7 +3,7 @@
   "version": 1,
   "targets": {
     "UAP,Version=v10.0": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -1869,7 +1869,7 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -3588,7 +3588,7 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -5271,7 +5271,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -6996,7 +6996,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -8679,7 +8679,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -10404,7 +10404,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
-      "Microsoft.Azure.Amqp/2.0.2": {
+      "Microsoft.Azure.Amqp/2.0.3": {
         "compile": {
           "lib/uap10.0/Microsoft.Azure.Amqp.dll": {}
         },
@@ -12088,11 +12088,12 @@
     }
   },
   "libraries": {
-    "Microsoft.Azure.Amqp/2.0.2": {
-      "sha512": "A5MRDzkstDGUTZtmkppJFL8gN74Grlq1GtMVVdBVbPgaUi4d/qBmlSahwRm7OJwRdOp7aG35geG67Sf0E/6TRg==",
+    "Microsoft.Azure.Amqp/2.0.3": {
+      "sha512": "rsvO6QAPaUvcln5+riYQucdsv1mAdk8UJvNCq7pSGvjbtQ7sf4Mi5R4kt4bXg8KiXCa1qXL0v9K/QquR1Ndi4w==",
       "type": "package",
+      "path": "Microsoft.Azure.Amqp/2.0.3",
       "files": [
-        "Microsoft.Azure.Amqp.2.0.2.nupkg.sha512",
+        "Microsoft.Azure.Amqp.2.0.3.nupkg.sha512",
         "Microsoft.Azure.Amqp.nuspec",
         "lib/monoandroid/Microsoft.Azure.Amqp.dll",
         "lib/net45/Microsoft.Azure.Amqp.XML",
@@ -15363,7 +15364,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Microsoft.Azure.Amqp >= 2.0.2",
+      "Microsoft.Azure.Amqp >= 2.0.3",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
       "Newtonsoft.Json >= 6.0.8",
       "PCLCrypto >= 2.0.147"

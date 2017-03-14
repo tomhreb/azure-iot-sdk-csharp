@@ -7,8 +7,9 @@ namespace Microsoft.Azure.Devices.Common
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Security;
+#if !WINDOWS_UWP && !NETSTANDARD1_3
     using System.Security.Permissions;
-
+#endif
     static class PartialTrustHelpers
     {
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
@@ -21,12 +22,16 @@ namespace Microsoft.Azure.Devices.Common
             [SecurityCritical]
             get
             {
+#if WINDOWS_UWP || NETSTANDARD1_3
+                throw new NotImplementedException();
+#else
                 if (AppDomain.CurrentDomain.IsHomogenous)
                 {
                     return false;
                 }
 
                 return SecurityManager.CurrentThreadRequiresSecurityContextCapture();
+#endif
             }
         }
 
@@ -34,6 +39,9 @@ namespace Microsoft.Azure.Devices.Common
         [SecurityCritical]
         internal static bool IsInFullTrust()
         {
+#if WINDOWS_UWP || NETSTANDARD1_3
+            throw new NotImplementedException();
+#else
             if (AppDomain.CurrentDomain.IsHomogenous)
             {
                 return AppDomain.CurrentDomain.IsFullyTrusted;
@@ -55,12 +63,16 @@ namespace Microsoft.Azure.Devices.Common
                     return false;
                 }
             }
+#endif
         }
 
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
         [SecurityCritical]
         internal static bool UnsafeIsInFullTrust()
         {
+#if WINDOWS_UWP || NETSTANDARD1_3
+            throw new NotImplementedException();
+#else
             if (AppDomain.CurrentDomain.IsHomogenous)
             {
                 return AppDomain.CurrentDomain.IsFullyTrusted;
@@ -69,8 +81,10 @@ namespace Microsoft.Azure.Devices.Common
             {
                 return !SecurityManager.CurrentThreadRequiresSecurityContextCapture();
             }
+#endif
         }
 
+#if !WINDOWS_UWP && !NETSTANDARD1_3
         [Fx.Tag.SecurityNote(Critical = "Captures security context with identity flow suppressed, " +
             "this requires satisfying a LinkDemand for infrastructure.")]
         [SecurityCritical]
@@ -89,18 +103,25 @@ namespace Microsoft.Azure.Devices.Common
                 }
             }
         }
+#endif
 
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
         [SecurityCritical]
         internal static bool IsTypeAptca(Type type)
         {
+#if WINDOWS_UWP || NETSTANDARD1_3
+            throw new NotImplementedException();
+#else
             Assembly assembly = type.Assembly;
             return IsAssemblyAptca(assembly) || !IsAssemblySigned(assembly);
+#endif
         }
 
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
         [SecurityCritical]
+#if !WINDOWS_UWP && !NETSTANDARD1_3
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+#endif
         [MethodImpl(MethodImplOptions.NoInlining)]
         static void DemandForFullTrust()
         {
@@ -110,22 +131,29 @@ namespace Microsoft.Azure.Devices.Common
         [SecurityCritical]
         static bool IsAssemblyAptca(Assembly assembly)
         {
+#if WINDOWS_UWP || NETSTANDARD1_3
+            throw new NotImplementedException();
+#else
             if (aptca == null)
             {
                 aptca = typeof(AllowPartiallyTrustedCallersAttribute);
             }
             return assembly.GetCustomAttributes(aptca, false).Length > 0;
+#endif
         }
 
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
         [SecurityCritical]
+#if !WINDOWS_UWP && !NETSTANDARD1_3
         [FileIOPermission(SecurityAction.Assert, Unrestricted = true)]
+#endif
         static bool IsAssemblySigned(Assembly assembly)
         {
             byte[] publicKeyToken = assembly.GetName().GetPublicKeyToken();
             return publicKeyToken != null & publicKeyToken.Length > 0;
         }
 
+#if !WINDOWS_UWP && !NETSTANDARD1_3
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
         [SecurityCritical]
         internal static bool CheckAppDomainPermissions(PermissionSet permissions)
@@ -133,14 +161,19 @@ namespace Microsoft.Azure.Devices.Common
             return AppDomain.CurrentDomain.IsHomogenous &&
                    permissions.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet);
         }
+#endif
 
         [Fx.Tag.SecurityNote(Critical = "used in a security-sensitive decision")]
         [SecurityCritical]
         internal static bool HasEtwPermissions()
         {
+#if WINDOWS_UWP || NETSTANDARD1_3
+            throw new NotImplementedException();
+#else
             //Currently unrestricted permissions are required to create Etw provider. 
             PermissionSet permissions = new PermissionSet(PermissionState.Unrestricted);
             return CheckAppDomainPermissions(permissions);
+#endif
         }
 
     }
