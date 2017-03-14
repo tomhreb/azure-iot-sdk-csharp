@@ -29,7 +29,8 @@ namespace Microsoft.Azure.Devices.E2ETests
 
         public static Tuple<string, RegistryManager> InitializeEnvironment(string devicePrefix)
         {
-            string iotHubConnectionString = Environment.GetEnvironmentVariable("IOTHUB_CONN_STRING_CSHARP");
+            //string iotHubConnectionString = Environment.GetEnvironmentVariable("IOTHUB_CONN_STRING_CSHARP");
+            string iotHubConnectionString = "HostName=fault-inject.private.azure-devices-int.net;SharedAccessKeyName=iothubowner;SharedAccessKey=lRUbpEibzVzB+TfIWr10bHFmdrOjCrQ1vbcEU0UXwX4=";
             RegistryManager rm = RegistryManager.CreateFromConnectionString(iotHubConnectionString);
 
             // Ensure to remove all previous devices.
@@ -78,6 +79,21 @@ namespace Microsoft.Azure.Devices.E2ETests
                 await registryManager.RemoveDeviceAsync(deviceName);
                 Debug.WriteLine("Device successfully removed");
             }).Wait();
+        }
+
+        public static Client.Message ComposeErrorInjectionCommand(string faultType, string reason, int delayInSecs)
+        {
+            string dataBuffer = Guid.NewGuid().ToString();
+
+            return new Client.Message(Encoding.UTF8.GetBytes(dataBuffer))
+            {
+                Properties =
+                {
+                    ["AzIoTHub_FaultOperationType"] = faultType,
+                    ["AzIoTHub_FaultOperationCloseReason"] = reason,
+                    ["AzIoTHub_FaultOperationDelayInSecs"] = delayInSecs.ToString()
+                }
+            };
         }
     }
 }
